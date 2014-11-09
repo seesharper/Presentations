@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(//fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Async/Await
+
+---
+
+# Agenda
+
+* BeginInvoke/EndInvoke
+* Task
+* Thread Local Storage / CallContext
+* Wait without blocking
+* I/O completion ports
+
+
+---
+
+# Purpose of multi-threading
+
+## Client - Responsiveness
+## Server - Scalability
+
+
+---
+
+# Old School
+
+```C#
+public class OldSchool
+{
+    public delegate string GetStringValueDelegate();
+
+    public void ExecuteAsync()
+    {
+        GetStringValueDelegate stringDelegate = GetStringValue;
+        stringDelegate.BeginInvoke(new AsyncCallback(GetStringValueCallback), null);
+    }
+
+    private string GetStringValue()
+    {
+        Thread.Sleep(2000);
+        return "SomeValue";
+    }
+
+    private void GetStringValueCallback(IAsyncResult asyncResult)
+    {
+        AsyncResult result = (AsyncResult)asyncResult;
+        GetStringValueDelegate getStringValueDelegate = (GetStringValueDelegate)result.AsyncDelegate;
+        var stringResult = getStringValueDelegate.EndInvoke(asyncResult);
+        Console.WriteLine(stringResult);
+    }
+}
+```
+---
+
+# Using Task
+
+```C#
+public class TaskAsync
+{
+    public void ExecuteAsync()
+    {
+        Task<string> task = new Task<string>(() => GetStringValue());
+        task.ContinueWith(completedTask => Console.WriteLine(completedTask.Result));
+    }
+
+    private string GetStringValue()
+    {
+        Thread.Sleep(2000);
+        return "SomeValue";
+    }
+}
+```
+---
+
+# Using Async/Await
+
+```C#
+public class AsyncAwait
+{
+    public async Task ExecuteAsync()
+    {
+        var result = await GetStringValue();
+        Console.WriteLine(result);
+    }
+
+    private Task<string> GetStringValue()
+    {
+        Thread.Sleep(2000);
+        return Task.FromResult("SomeValue");
+    }
+}
+```
+---
+
+# Thread Safety
+
+  * No more marshaling into the UI thread.
+  * Still need to think about shared resources
+
+# Are we thread safe?
+
+```C#
+public class ThreadSafeClass
+{
+    private string name;
+
+    public ThreadSafeClass(string name)
+    {
+        this.name = name;
+    }
+
+    //..Many more methods in this class
+}
+```
+
+---
+
+# How about now?
+
+```C#
+public class ThreadSafeClass
+{
+    private readonly string name;
+
+    public ThreadSafeClass(string name)
+    {
+        this.name = name;
+    }
+
+    //..Many more methods in this class
+}
+```
+---
+
+# So this must be thread safe too, right?
+
+```C#
+public class AreWeThreadSafe
+{
+    private static string name;
+
+    public AreWeThreadSafe()
+    {
+    }
+
+    //..Many more methods in this class
+}
+```
+
+
+
+
+---
+
+# Thread Local Storage is going bye-bye
+
+```C#
+public class UsingThreadLocalStorage
+{
+    private readonly ThreadLocal<Stack<string>> callStack;
+
+    public UsingThreadLocalStorage()
+    {
+        callStack = new ThreadLocal<Stack<string>>(() => new Stack<string>());
+    }
+
+    public async Task ExecuteAsync()
+    {
+        callStack.Value.Push("ExecuteAsync");
+        await GetStringValue();
+        foreach (var method in callStack.Value.ToArray())
+        {
+            Console.WriteLine(method);
+        }
+    }
+
+    private Task<string> GetStringValue()
+    {
+        callStack.Value.Push("GetStringValue");
+        Thread.Sleep(2000);
+        return Task.FromResult("SomeValue");
+    }
+}
+```
+---
+
+# Output
+
+```
+  SomeValue
+```
+
+---
+# CallContext
+```C#
+public class UsingLogicalContext
+{
+    private readonly LogicalThreadStorage<Stack<string>> callStack;
+
+    public UsingLogicalContext()
+    {
+        callStack = new LogicalThreadStorage<Stack<string>>(() => new Stack<string>());
+    }
+
+    public async Task ExecuteAsync()
+    {
+        callStack.Value.Push("ExecuteAsync");
+        var result = await GetStringValue();
+        Console.WriteLine(result);
+        foreach (var method in callStack.Value.ToArray())
+        {
+            Console.WriteLine(method);
+        }
+    }
+
+    private async Task<string> GetStringValue()
+    {
+        callStack.Value.Push("GetStringValue");
+        await Task.Delay(1000);
+        return "SomeValue";
+    }
+}
+```
+---
+
+# Output
+
+```
+  SomeValue
+  GetStringValue
+  ExecuteAsync
+```
+---
+
+# Async/Await - A Leaky Abstraction
+
+## What? This isn't the holy grail of asynchronous programming?
+
+## Well, that depends......
+
+---
+
+# SynchronizationContext
+
+"Provides the basic functionality for propagating a synchronization context in various synchronization models."
+
+```C#
+public static class DeadLocker
+{
+    private static async Task DelayAsync()
+    {
+        await Task.Delay(1000);
+    }
+    // This method causes a deadlock when called in a GUI or ASP.NET context.
+    public static void Test()
+    {
+        // Start the delay.
+        var delayTask = DelayAsync();
+        // Wait for the delay to complete.
+        delayTask.Wait();
+    }
+}
+```
+---
+
+# Resources
+
+  Introduction to Async/Await on ASP.NET
+
+  http://msdn.microsoft.com/en-us/magazine/dn802603.aspx
+
+  Async/Await and code coverage
+
+  http://bernhard-richter.blogspot.no/2014/09/asyncawait-and-code-coverage.html
+
+  Why I wish C# never got async/await
+
+  https://mrange.wordpress.com/2014/05/29/why-i-wish-c-never-got-asyncawait/
+
+  Stephen Cleary
+
+  http://blog.stephencleary.com
+
+  C# in depth
+
+  http://csharpindepth.com
+
+
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+
+    </script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+     <script type="text/javascript">
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'cs',
+          ratio : '16:9'
+        }) ;
+    </script>
+  </body>
+</html>
