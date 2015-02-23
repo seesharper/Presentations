@@ -1,0 +1,432 @@
+<html>
+  <head>
+    <title>SQL is awesome</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Open Sans'; }
+      code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;        
+      }
+      h1, h2, h3 {
+        font-family: 'Open Sans';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Droid Sans Mono', font-weight : normal; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# SQL
+
+SQL is awesome, JOIN the fun
+---
+
+# Agenda
+--
+
+  * JOINS (inner, outer)
+  * UNION (ALL)
+  * Derived Queries
+  * SubQueries
+  * EXISTS vs IN
+  * Query plans
+
+---
+
+# But first
+
+--
+
+![](fail.png)
+
+
+---
+
+# Do you speak Northwindian?
+
+--
+  * It's simple
+  * It has been around for ages (literally)
+  * Everybody understands the domain 
+
+![](Northwind.png)
+
+---
+
+#Benchmarking
+
+#### (Before you panic and buy a 2 million tool that only a few understands) 
+
+* Stopwatch 
+* Apache Benchmark
+* Profiling tests in Visual Studio
+
+If that doesn't work out for ya, buy that 2 million tool.
+
+---
+
+# The basics
+
+```sql
+SELECT 
+  customerid,
+  companyname
+FROM 
+  customers 
+WHERE 
+  country = :country    
+```
+
+  * ONLY select (project) the columns needed
+  * ALWAYS use parameters
+
+ ![](sqlhack.png)  
+
+---
+# JOIN
+
+* INNER JOIN
+* OUTER JOIN (LEFT, RIGHT)
+
+Outer joins are mostly used when foreign keys are nullable, otherwise an inner join 
+is "safe" and usually faster.
+
+---
+```sql
+--Upward" JOIN
+SELECT 
+  o.OrderDate,
+  c.CompanyName 
+FROM 
+  orders o 
+INNER JOIN 
+  customers c
+ON 
+  o.customerid = c.customerid AND
+  o.orderid = :orderid      
+```
+Still returns just one row 
+
+```sql
+--"Downward" JOIN
+SELECT 
+  o.orderdate,
+  od.productid
+FROM 
+  orders o
+INNER JOIN 
+  orderdetails od
+ON 
+  o.orderid = od.orderid AND
+  o.orderid = : orderid      
+```
+Returns one row for each order detail.
+---
+# Customers/Orders
+
+Requirement:
+
+For a given set of customers, bring back the customers along with the related orders.
+
+--
+
+* SELECT N + 1 (The achilles heel of ORM's)
+* JOIN
+* One query per relation
+
+---
+
+## You are going to the grocery store to pick up a total of five items
+
+Which of the following would be the fastest?
+
+A: Go back and forth five times and pick up one item at a time
+
+B: Pick up all five items in one go
+
+---
+# SELECT N + 1
+
+```cs
+var customers = GetCustomers();
+
+foreach(Customer customer in customers)
+{
+  var orders = GetOrders(customer);  
+}
+
+``` 
+
+```sql
+-- SQL (1)
+SELECT 
+  customerid,
+  companyname
+FROM 
+  customers 
+WHERE 
+  country = :country    
+-- SQL (N)
+SELECT 
+  orderid
+FROM  
+  orders
+WHERE 
+  customerid = :customerid    
+```
+---
+
+class: center, middle
+
+# Could it be that an excuse actually exists for ever doing SELECT N + 1?
+
+---
+
+class: center, middle
+
+# That's a BIG FAT NO!!!!!!!
+  
+---
+
+# One query per relation
+
+```cs
+var customers = GetCustomers();
+var orders = GetOrders();
+```
+```sql
+SELECT 
+  customerid,
+  companyname
+FROM 
+  customers 
+WHERE 
+  country = :country  
+
+SELECT 
+  o.orderid
+FROM 
+  orders o
+INNER JOIN 
+  customers c
+ON 
+  o.customerid = c.customerid AND
+  c.country = :country      
+```
+
+---
+# JOIN
+```cs
+var customersAndOrders = GetCustomersAndOrders()
+```
+```sql
+SELECT 
+  c.customerid,
+  c.companyname,
+  o.orderid
+FROM 
+  customers c
+INNER JOIN 
+  orders o 
+ON 
+  c.customerid = o.customerid AND
+  c.country = :country      
+```
+
+---
+
+## Multiple relations
+
+For an employee we want to get the employee itself along with the orders placed by this employee and the territories for the employee.
+
+```sql
+SELECT 
+  e.firstname,
+  o.orderid,
+  et.territoryid
+FROM 
+  employees e
+INNER JOIN 
+  orders o 
+ON 
+  e.employeeid = o.employeeid AND
+  e.employeeid = 7
+INNER JOIN 
+  employeeterritories et 
+ON 
+  e.employeeid = et.employeeid
+```
+
+FYI: There are 72 orders and 10 territories
+
+How many rows does this query return and what characterizes the result?
+
+--
+
+720 rows (A Cartesian product)
+
+--
+
+---
+# Using two queries
+
+```sql
+--orders
+SELECT 
+  e.firstname,
+  o.orderid
+FROM 
+  employees e
+INNER JOIN 
+  orders o 
+ON 
+  e.employeeid = o.employeeid AND
+  e.employeeid = 7
+```
+```sql
+--territories
+SELECT 
+  et.territoryid
+FROM 
+  employees e
+INNER JOIN 
+  employeeterritories et 
+ON 
+  e.employeeid = et.employeeid AND
+  e.employeeid = 7
+```
+---
+# UNION (One query to rule them all)
+
+```sql
+SELECT 
+  e.firstname,
+  o.orderid,
+  null
+FROM 
+  employees e
+INNER JOIN 
+  orders o 
+ON 
+  e.employeeid = o.employeeid AND
+  e.employeeid = 7 
+UNION
+SELECT 
+  null,
+  null,
+  et.territoryid
+FROM 
+  employees e
+INNER JOIN 
+  employeeterritories et 
+ON 
+  e.employeeid = et.employeeid AND
+  e.employeeid = 7
+```
+---
+#Sub query
+
+```sql
+SELECT 
+  c.customerid,
+  c.companyName,
+  (SELECT 
+    SUM(od.quantity * (od.unitprice - od.discount))
+  FROM 
+    "Order Details" od
+  INNER JOIN 
+    Orders o 
+  ON 
+    o.orderid = od.orderid  AND
+    o.customerid = c.customerid) Total
+FROM 
+  customers c
+WHERE 
+  c.customerid = 'ALFKI'
+```
+---
+#Derived table
+
+```sql
+SELECT
+  c.customerid,
+  c.companyname,
+  ot.Total 
+FROM
+  Customers c
+INNER JOIN
+  (
+  SELECT  
+    o.CustomerId, 
+    SUM(od.quantity * (od.unitprice - od.discount)) Total
+  FROM 
+    Orders o 
+  INNER JOIN 
+    "Order Details" od
+  ON 
+    o.OrderId = od.OrderId
+  GROUP BY 
+    o.CustomerId
+  )  ot
+ON 
+  c.customerid = ot.CustomerId AND
+  c.CustomerId = 'ALFKI'
+```
+
+---
+#LINQ is NOT SQL
+
+```cs
+Order[] orders = GetOrders();
+Customer[] customers = GetCustomers();
+
+foreach(var customer in customers)
+{
+  customers.Orders = orders.Where(o => o.CustomerId = customer.CustomerId).ToArray();
+}
+```
+--
+Always prefer a dictionary over an enumerable.
+
+```cs
+var ordersPerCustomer = orders.GroupBy(o => o.CustomerId)
+  .ToDictionary(g => g.Key, g => g.ToArray());
+foreach(var customer in customers)
+{
+  customers.Orders = ordersPerCustomer[customer.CustomerId];
+}
+
+```
+
+---
+
+
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+<script type="text/javascript" src="https://www.draw.io/embed.js?s=er"></script>
+    </script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+     <script type="text/javascript">
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'cs',
+          ratio : '16:9'
+        }) ;
+    </script>
+  </body>
+</html>
+
