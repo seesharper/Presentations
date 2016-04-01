@@ -23,7 +23,7 @@ class: center, middle
 
 # DIPS.Configuration
 
-## Sentralisert konfigurasjon med ZooKeeper
+## Configuration with ZooKeeper
 
 ---
 class: center, middle
@@ -32,16 +32,37 @@ class: center, middle
 
 ---
 
-# Formål
+# Goal
 
-## Slippe duplisering av felles konfigurasjon
-## Konfigurasjon gjøres ett sted
+## Avoid duplication of common configuration values. 
+## A single point of entry for all configuration.
  
 ---
 
+# Server
+
+ ## .Net Web API Application
+ ## Encapsulates the complexity of communicating with ZooKeeper
+ ## Provides a dead simple REST API for configuration.
+ ## Hosted on the ZooKeeper nodes (mono)
+
+---
+
+# Client 
+
+## Web Application written in Aurelia
+## Responsive - Looks good even on smaller devices
+## Served as a static site directly from the Web Api application
+
+---
+class: center, middle
+![](train.gif)
 
 
-
+---
+class: center, middle
+![](crash.gif)  
+---
 
     </textarea>
     <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
