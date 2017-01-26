@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(//fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle
+# Open Source Rocks
+
+---
+
+# What does it mean to be an open source developer?
+
+* Create and maintain your own project
+* Contribute to other projects 
+
+---
+# Community 
+
+  * GitHub
+  * Twitter
+  * Stack Overflow
+  * Slack
+  
+---
+# Code Quality
+
+Fact: People will look at your code and they will NOT trust sloppy code.
+* Never expose a public method without documentation
+* Always treat warnings as errors
+* Use analyzers to enforce style and consistency (Stylecop)
+
+---
+
+# Testing 
+
+Fact: Nobody will ever consider using a project that lacks testing.
+
+* Code Coverage must be AT LEAST 100%
+* Nice clean and readable code also applies to tests.
+
+---
+
+# Continious Integration
+
+Fact: Your project will not survive without it.
+
+* AppVeyor - Windows build agent
+* Travis - Linux build agent
+
+Allows automatic deployment to Nuget
+
+---
+
+# Documentation
+
+Fact: Nobody will EVER consider using a project without documentation
+
+* Keep it simple and straight to the point 
+* Keep it close to the code
+* Readme.md is your friend
+
+---
+
+# Issues
+
+Broad term that covers everything from questions, bug reports and feature requests.
+
+* Keep it close to the code
+* A repo without active issues are often a sign of low activity
+* Becomes part of the documentation over time.
+* Require information about version end environment
+
+---
+
+# Pull Requests
+
+Fact: You will get pull requests that adds unnecessary complexity to you code.
+Another Fact: You will get pull requests that actually fixes problems
+
+* Do not blindly merge pull requests
+* Consider a workaround for edge cases
+* ALWAYS be polite and make sure to appreciate contributions 
+
+
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+
+    </script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+     <script type="text/javascript">
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'cs',
+          ratio : '16:9'
+        }) ;
+    </script>
+  </body>
+</html>
