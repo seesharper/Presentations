@@ -20,21 +20,17 @@
     <textarea id="source">
 
 class: center, middle
-
+---
 # C# Scripting
 
----
 
 # Agenda
 
 - The history of C# scripting
-- How does it work?
-- Roslyn
-- Script Runnners
-- OmniSharp
+- The moving parts
+- Use cases
 
-
---- 
+---
 
 # History
 
@@ -43,8 +39,33 @@ class: center, middle
 ## * Edited using your favorite text editor 
 ## * No intellisense or debugging 
 
---- 
+---
+# The main players
 
+## * Roslyn
+## * OmniSharp
+## * IDE (VSCode, Sublime, Atom etc)
+## * Runners (ScriptCs, CSI, Dotnet-Script, Cake)
+
+---
+
+# ScriptCs
+
+## * Runs on full framework (Windows desktop or Mono)
+## * Debugging (VSCode with runng on mono/ VS2017)
+## * Has its own package management system 
+
+
+---
+# Repo's 
+
+## [Roslyn](https://github.com/dotnet/roslyn)
+## [OmniSharp](https://github.com/OmniSharp/omnisharp-roslyn)
+## [ScriptCS](https://github.com/scriptcs/scriptcs)
+## [Dotnet-Script](https://github.com/filipw/dotnet-script)
+
+
+---
 # project.json (RIP)
 
 ## * The new and shiny project format
@@ -54,6 +75,7 @@ class: center, middle
 
 
 ---
+
 # Roslyn 
 ## * Compiler as a service
 ## * Scripting engine
@@ -80,6 +102,31 @@ class: center, middle
 ## CSI (Full framework. Shipped with Visual Studio)
 
 ---
+
+---
+
+
+# NuGet Packages
+
+
+
+It all started here 
+
+https://github.com/filipw/dotnet-script/issues/25
+
+
+
+```c#
+#r "nuget: AutoMapper, 6.2.0"
+```
+
+Runner : Dotnet-Script
+
+Intellisense provided by OmniSharp.Roslyn
+
+
+---
+
 
 # Intellisense
 
@@ -118,47 +165,23 @@ if (match.IsMatch)
 # In a NutShell
 ## * No top level class
 ## * Cross platform
-## * 
-
----
-
-
----
-
-
-# NuGet Packages
-
-
-
-It all started here 
-
-https://github.com/filipw/dotnet-script/issues/25
-
-
-
-```c#
-#r "nuget: AutoMapper, 6.2.0"
-```
-
-Runner : Dotnet-Script
-
-Intellisense provided by OmniSharp.Roslyn
-
+## * Top level extension methods.
 
 ---
 
 # What's next 
 
 ## * Script Packages 
-## * 
+## * REPL 
 
+---
 
 # Open Source - Getting what you want 
 
 ## * Team up with people that can help you
 ## * These people know other people that you need to talk to.
 ## * Always be polite and listen to others
-## * 
+
 
 
     </textarea>
