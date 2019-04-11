@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8" />
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(
+        https://fonts.googleapis.com/css?family=Droid+Serif:400,
+        700,
+        400italic
+      );
+      @import url(
+        https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,
+        700,
+        400italic
+      );
+
+      body {
+        font-family: "Droid Serif";
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Yanone Kaffeesatz";
+        font-weight: normal;
+      }
+      .remark-code,
+      .remark-inline-code {
+        font-family: "Ubuntu Mono";
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Life as an open source developer
+
+---
+
+# Agenda
+
+## Motivation
+## Communication
+## Tools
+## Automation
+## Versioning
+
+---
+# My profile
+
+* ## https://www.nuget.org/profiles/bernhard%20richter
+* ## https://github.com/seesharper
+
+---
+
+# Motivation
+
+* ## Have an idea? Get it out there
+* ## Better, faster, simpler, different
+* ## Join forces and contribute to other projects.
+* ## Learning new stuff
+* ## Meet new people
+* ## Everyone should have a pet project
+
+---
+# How do we find time to all this when you
+
+## * Have a wife
+## * Have 3 kids
+## * Live a "normal" life
+
+---
+
+## * No deadline
+## * Do it for fun and learning
+## * No "Game of Thrones"
+
+---
+background-size: 70%
+background-image: url(https://user-images.githubusercontent.com/1034073/55555847-75c7b580-56e6-11e9-8936-ea2689c11add.png)
+---
+background-image: url(https://user-images.githubusercontent.com/1034073/55555693-297c7580-56e6-11e9-8d4c-aa3a67485f84.png)
+---
+background-size: 70%
+background-image: url(https://user-images.githubusercontent.com/1034073/55803376-7e4f3000-5ada-11e9-8157-4abf8f8ba931.png)
+---
+
+# Your typical open source project
+
+## * A small group of maintainers
+## * Changes comes in via pull requests.
+## * Uses the MIT license
+
+
+---
+background-size: 70%
+background-image:url(https://user-images.githubusercontent.com/1034073/55808673-d723c600-5ae4-11e9-9132-96c34fdfeabf.png)
+---
+
+# Communication
+* ## Github Issues
+* ## Slack
+* ## Twitter
+* ## Stack Overflow
+
+---
+
+# Open source culture
+
+## * Be nice to each other
+## * Passion driven development
+## * We are here to learn and contribute
+
+---
+
+# Continuous Integration
+
+* ## Travis (Linux and Mac)
+* ## AppVeyor (Windows and Linux)
+* ## Azure Pipelines (Linux, Mac and Windows)
+* ## Dependabot
+* ## Treat your build server as a "cron job"
+
+https://github.com/seesharper/LightInject.Microsoft.DependencyInjection/pulls
+
+---
+# Documentation Driven Development
+
+## TDD => Write Test -> Write Code
+
+## DDD => Write Docs => Write Tests => Write Code
+
+### Much easier to change code in Markdown
+
+### If we have trouble explaining the API, probably not a good API 😀
+---
+
+# Documentation
+
+* ## README.md
+* ## MKDocs (http://www.lightinject.net/)
+---
+
+# Human Resources
+
+## Limited, typically one or a small group of people.
+## Contributors are just there for the PR.
+## Try to be at least two people
+## Maintain only a single version
+## Don't break anything.
+
+---
+
+---
+
+
+# Release management
+
+* ## Automate all things.
+* ## Change logs
+* ## Push packages
+* ## Single click deployment.
+* ## Master branch is always ready to go.
+
+https://github.com/filipw/dotnet-script/releases/
+
+https://github.com/seesharper/LightInject.Microsoft.DependencyInjection/releases
+
+---
+
+# Source code management
+
+* ## NEVER push directly to master
+###(You will fuck up eventually)
+* ## All changes must come as pull requests.
+* ## Can we release from master now?
+
+---
+
+
+# Code Quality
+
+## Everyone can review your code
+## You don't want issues
+## Good and clean code builds trust
+## Code coverage - minimum 100% (no joke)
+
+---
+
+# The art of saying "No!"
+
+* ## Don't add nice to have features
+* ## Once you merge a pull request, you own the code.
+* ## When saying no, be polite and explain why.
+* ## If possible, try to come up with a workaround.
+
+This is me saying no
+
+https://github.com/seesharper/LightInject/pull/474
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
