@@ -1,0 +1,369 @@
+<html>
+  <head>
+    <title>.Net Core</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+      href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+          font-family: 'Open Sans';
+      }
+
+      code {
+          -moz-border-radius: 5px;
+          -web-border-radius: 5px;
+          background: #e7e8e2;
+          border-radius: 5px;
+      }
+
+      h1,
+      h2,
+      h3 {
+          font-family: 'Open Sans';
+          font-weight: normal;
+      }
+
+      .remark-code,
+      .remark-inline-code {
+          font-family: 'Droid Sans Mono', font-weight: normal;
+      }
+    </style>
+  </head>
+
+  <body>
+    <textarea id="source">
+
+# Bernhard Richter (@bernhardrichter)
+
+* Systemutvikler i Trondheim
+* 48 år
+* 3 barn, 1 kone, 1 hus, 1 hytte (Sverige ☹️)og to katter
+
+NuGet (https://www.nuget.org/profiles/bernhard%20richter)
+
+GitHub (https://github.com/seesharper)
+
+Repos
+
+This presentation http://seesharper.github.io/Presentations/DotNetCore/#1
+
+Basic stuff https://github.com/seesharper/NTNU.Samples
+
+Web App Template https://github.com/seesharper/NTNU.WebAppTemplate
+
+
+---
+# .Net Core
+
+".NET Core is a free and open-source, managed computer software framework for Windows, Linux, and macOS operating
+systems. It is a cross-platform successor to .NET Framework. The project is primarily developed by Microsoft employees
+by way of the .NET Foundation, and released under the MIT License."
+---
+
+# A little bit of history
+
+* .Net Framework 1.0 released 13 February 2002
+
+* The Common Language Infrastructure (CLI) is an open specification (ECMA 335)
+
+* .Net Framework and Mono are just implementations of this specification.
+
+* Mono(Miguel de Icaza) Initial Release June 2004 (Prerelease versions existed as early as 2001)
+
+https://www.ecma-international.org/publications/standards/Ecma-335.htm
+
+https://time.graphics/line/78368
+
+---
+
+# Open Source
+
+* Everything used to be closed source
+* Now everything is open source
+* Listens to the dev community
+* All on Github (https://github.com/dotnet/runtime)
+
+https://github.com/dotnet/runtime/issues/35999
+
+https://github.com/dotnet/runtime/pull/40227#issuecomment-668266330
+
+---
+
+# Why .Net Core
+
+* Multiple implementations of the specification (.Net Framework, SilverLight, Mono)
+* A single implementation designed to be cross platform
+* Being able to release new versions of .Net Core independently of Windows versions
+* Define a new standard to express the API level for a given library/application (NetStandard).
+* Open Source
+
+https://github.com/microsoft
+
+---
+
+# Cross platform
+
+* Mac
+* Linux
+* Windows
+* ARM (Raspberry PI)
+* Tooling (dotnet CLI , VS Code and many others)
+
+---
+
+# The dotnet CLI
+
+* Command line tool for working with .Net Core apps
+* No need for a particular IDE
+* Everything can be done using the terminal
+* Creating new solutions
+* Adding NuGet packages
+* Building and deploying apps
+
+---
+
+# Creating a new console app.
+
+Create a folder for your app
+
+```
+dotnet new console
+```
+
+This will scaffold a new app that is ready to run.
+
+---
+
+# Building the app
+
+* Debug/Release mode
+
+```
+dotnet build -c release
+```
+
+# Publishing the app
+
+* Framework dependant vs Self contained
+
+```
+dotnet publish -r linux-x64 --self-contained false
+```
+---
+
+# LINQ
+
+* Lambda expressions Anonymous functions
+* Extension methods
+* Examples
+
+
+# Async await
+
+* Simplify asynchronous programming
+* Almost everything is async in .Net Core (IO)
+* Examples
+
+---
+
+# Dependency Injection
+
+* Loosely coupled components
+* Manually vs using a DI container
+* LifeTimes (singleton, transient and scoped)
+* Decorator pattern
+
+---
+
+# Testing
+
+* Unit Tests
+* Integration Tests (end to end)
+* xUnit (nUnit, Fixie)
+* Assertion frameworks (FluentAssertions)
+* Mocking (Moq)
+* Code Coverage (coverlet)
+
+
+
+---
+
+# NuGet
+
+* Every single dependency is a NuGet package.
+* If a bug is found within one of these packages, it can be adressed and released much faster than on .Net Framework.
+* Global NuGet cache
+
+
+https://www.nuget.org/packages/System.Collections/
+
+
+---
+
+
+
+# Net Standard
+
+"The .NET Standard is a formal specification of .NET APIs that are intended to be available on all .NET implementations. The motivation behind the .NET Standard is establishing greater uniformity in the .NET ecosystem."
+
+* Relevant for all implentations of the CLI (Mono, .Net Framework, .Net Core)
+
+* Replaces PCL's (Portable class libraries).
+
+* With NetStandard2.0 we start to see NuGet packages that are NetStandard2.0 only.
+
+* The need for cross compilation becomes less relevant as the standard emerges.
+---
+
+# Portable Class Libraries
+
+## PCL Hell
+
+https://github.com/seesharper/LightInject/blob/116c47e5ea2613e5ec22b133f38e7c78928b4481/LightInject/LightInject.cs
+
+## NetStandard
+
+https://github.com/seesharper/LightInject/blob/master/src/LightInject/LightInject.cs
+
+
+---
+
+# Portable Class Libraries
+
+![](PCL.png "Logo Title Text 1")
+---
+![](PCL2.png "Logo Title Text 1")
+---
+![](netstandard.png "Logo Title Text 1")
+---
+
+# The new project file format (CSPROJ)
+
+* Less verbose
+* Package references
+* Folder based project structure
+* Can be used for all target frameworks.
+
+#Demo
+
+---
+
+---
+# DotNet CLI
+
+* Create and manage projects from the commmand line
+* Project templates
+* Extensible (dotnet-script, dotnet-serve)
+* Cross platform
+* Can be used for all target frameworks.
+
+# Demo
+---
+
+# Our first .Net Core application
+
+* Create a new project using the DotNet CLI
+* Add package references
+* Build and publish
+* Framework-dependent vs self-contained deployment.
+
+# Demo
+
+---
+
+# Code coverage
+
+* Still only available using VS Enterprise Edition
+* CI platforms such as AppVeyor don't provide Enterprise edition.
+* OpenCover
+* DebugType - Full vs Portable
+
+---
+
+# Asp.Net Core
+
+* No dependency to System.Web (IIS)
+* Typically behind IIS as a reverse proxy
+* Asp.Net Core 2.1 allows applications to be hosted as a true IIS application.
+* Runs on top of .Net Core and .Net Framework.
+
+---
+
+# Asp.Net Core
+
+![](aspnetcore20.png "Logo Title Text 1")
+
+---
+
+# Oracle
+
+* Waited a LONG time before implementing a driver for .Net Core/Netstandard
+* Available as a NuGet package (ETA Q3 2018)
+* "Old" managed driver can still be used for projects targeting the full framework (cross compilation).
+
+---
+
+
+# Kestrel
+
+"Kestrel is a cross-platform web server for ASP.NET Core based on libuv, a cross-platform asynchronous I/O library. Kestrel is the web server that's included by default in ASP.NET Core project templates."
+
+* Performance
+* Cross platform
+
+https://www.techempower.com/benchmarks/#section=data-r15&hw=ph&test=plaintext
+
+---
+
+# DotNet Global Tools
+
+* Allows global extensions to the DotNet CLI.
+* Provides the same semantics as global NPM modules
+
+```
+dotnet install tool -g dotnet-serve
+```
+
+---
+
+# dotnet-script
+
+* https://github.com/filipw/dotnet-script
+* C# scripting on .Net Core
+* Inline NuGet support
+* Support for debugging in VS Code
+
+#Demo
+
+---
+
+
+
+
+
+
+
+    </textarea>
+    <script
+      src="http://gnab.github.io/remark/downloads/remark-latest.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: "monokai",
+        highlightLanguage: "cs",
+        ratio: "16:9",
+      });
+    </script>
+  </body>
+</html>
