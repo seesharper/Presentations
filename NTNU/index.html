@@ -42,7 +42,7 @@
 
 # Bernhard Richter (@bernhardrichter)
 
-* Systemutvikler i Trondheim
+* Systemutvikler i DIPS Trondheim
 * 48 år
 * 3 barn, 1 kone, 1 hus, 1 hytte (Sverige ☹️)og to katter
 
@@ -58,6 +58,7 @@ Basic stuff https://github.com/seesharper/NTNU.Samples
 
 Web App Template https://github.com/seesharper/NTNU.WebAppTemplate
 
+![](dips.png "Logo")
 
 ---
 # .Net Core
@@ -65,6 +66,8 @@ Web App Template https://github.com/seesharper/NTNU.WebAppTemplate
 ".NET Core is a free and open-source, managed computer software framework for Windows, Linux, and macOS operating
 systems. It is a cross-platform successor to .NET Framework. The project is primarily developed by Microsoft employees
 by way of the .NET Foundation, and released under the MIT License."
+
+![](dips.png "Logo")
 ---
 
 # A little bit of history
@@ -81,6 +84,8 @@ https://www.ecma-international.org/publications/standards/Ecma-335.htm
 
 https://time.graphics/line/78368
 
+![](dips.png "Logo")
+
 ---
 
 # Open Source
@@ -94,6 +99,7 @@ https://github.com/dotnet/runtime/issues/35999
 
 https://github.com/dotnet/runtime/pull/40227#issuecomment-668266330
 
+![](dips.png "Logo")
 ---
 
 # Why .Net Core
@@ -106,6 +112,8 @@ https://github.com/dotnet/runtime/pull/40227#issuecomment-668266330
 
 https://github.com/microsoft
 
+![](dips.png "Logo")
+
 ---
 
 # Cross platform
@@ -115,6 +123,8 @@ https://github.com/microsoft
 * Windows
 * ARM (Raspberry PI)
 * Tooling (dotnet CLI , VS Code and many others)
+
+![](dips.png "Logo")
 
 ---
 
@@ -126,10 +136,34 @@ https://github.com/microsoft
 * Creating new solutions
 * Adding NuGet packages
 * Building and deploying apps
+* Extensible (dotnet-script, dotnet-serve)
+* Create and manage projects from the command line
+* Project templates
+* Cross platform
+
+```
+dotnet --info
+```
+
+
+![](dips.png "Logo")
+
+---
+# Our first .Net Core application
+
+* Create a new project using the DotNet CLI
+* Add package references
+* Build and publish
+* Framework-dependent vs self-contained deployment.
+
+
+
+![](dips.png "Logo")
 
 ---
 
-# Creating a new console app.
+
+# Creating our first app
 
 Create a folder for your app
 
@@ -137,40 +171,82 @@ Create a folder for your app
 dotnet new console
 ```
 
-This will scaffold a new app that is ready to run.
+This will scaffold a new console app.
 
+```
+dotnet run
+```
+
+
+
+![](dips.png "Logo")
 ---
 
 # Building the app
 
-* Debug/Release mode
+### Debug/Release mode
+
+`debug` mode is used to enable debugging, while `release` mode is usually used when publishing an app.
 
 ```
-dotnet build -c release
+dotnet build -c release/debug
 ```
+
+![](dips.png "Logo")
+
+---
 
 # Publishing the app
 
-* Framework dependant vs Self contained
+### Framework dependant deployment (FDD)
+* Requires the runtime to be installed
+* Produces smaller output
+
+### Self Contained Deployment SDD
+
+* Produces binaries targeting a specific runtime such as `osx-x64`
+* No need to install .Net Core Runtime
+
 
 ```
-dotnet publish -r linux-x64 --self-contained false
+dotnet publish
 ```
+
+vs
+
+```
+dotnet publish -r osx-x64 --self-contained true
+```
+
+![](dips.png "Logo")
 ---
 
+# What do absolutely need to know?
+
+* Generics
+* LINQ (Language Integrated Query)
+* Async/Await
+* Dependency Injection
+* CQRS (http://seesharper.github.io/Presentations/CQRS/#1)
+
+![](dips.png "Logo")
+
+---
 # LINQ
 
 * Lambda expressions Anonymous functions
 * Extension methods
 * Examples
 
-
+![](dips.png "Logo")
+---
 # Async await
 
 * Simplify asynchronous programming
 * Almost everything is async in .Net Core (IO)
 * Examples
 
+![](dips.png "Logo")
 ---
 
 # Dependency Injection
@@ -180,6 +256,7 @@ dotnet publish -r linux-x64 --self-contained false
 * LifeTimes (singleton, transient and scoped)
 * Decorator pattern
 
+![](dips.png "Logo")
 ---
 
 # Testing
@@ -191,6 +268,7 @@ dotnet publish -r linux-x64 --self-contained false
 * Mocking (Moq)
 * Code Coverage (coverlet)
 
+![](dips.png "Logo")
 
 
 ---
@@ -198,138 +276,28 @@ dotnet publish -r linux-x64 --self-contained false
 # NuGet
 
 * Every single dependency is a NuGet package.
-* If a bug is found within one of these packages, it can be adressed and released much faster than on .Net Framework.
+* If a bug is found within one of these packages, it can be addressed and released much faster than on .Net Framework.
 * Global NuGet cache
 
 
 https://www.nuget.org/packages/System.Collections/
 
-
+![](dips.png "Logo")
 ---
 
+## Global Tools
 
-
-# Net Standard
-
-"The .NET Standard is a formal specification of .NET APIs that are intended to be available on all .NET implementations. The motivation behind the .NET Standard is establishing greater uniformity in the .NET ecosystem."
-
-* Relevant for all implentations of the CLI (Mono, .Net Framework, .Net Core)
-
-* Replaces PCL's (Portable class libraries).
-
-* With NetStandard2.0 we start to see NuGet packages that are NetStandard2.0 only.
-
-* The need for cross compilation becomes less relevant as the standard emerges.
----
-
-# Portable Class Libraries
-
-## PCL Hell
-
-https://github.com/seesharper/LightInject/blob/116c47e5ea2613e5ec22b133f38e7c78928b4481/LightInject/LightInject.cs
-
-## NetStandard
-
-https://github.com/seesharper/LightInject/blob/master/src/LightInject/LightInject.cs
-
-
----
-
-# Portable Class Libraries
-
-![](PCL.png "Logo Title Text 1")
----
-![](PCL2.png "Logo Title Text 1")
----
-![](netstandard.png "Logo Title Text 1")
----
-
-# The new project file format (CSPROJ)
-
-* Less verbose
-* Package references
-* Folder based project structure
-* Can be used for all target frameworks.
-
-#Demo
-
----
-
----
-# DotNet CLI
-
-* Create and manage projects from the commmand line
-* Project templates
-* Extensible (dotnet-script, dotnet-serve)
-* Cross platform
-* Can be used for all target frameworks.
-
-# Demo
----
-
-# Our first .Net Core application
-
-* Create a new project using the DotNet CLI
-* Add package references
-* Build and publish
-* Framework-dependent vs self-contained deployment.
-
-# Demo
-
----
-
-# Code coverage
-
-* Still only available using VS Enterprise Edition
-* CI platforms such as AppVeyor don't provide Enterprise edition.
-* OpenCover
-* DebugType - Full vs Portable
-
----
-
-# Asp.Net Core
-
-* No dependency to System.Web (IIS)
-* Typically behind IIS as a reverse proxy
-* Asp.Net Core 2.1 allows applications to be hosted as a true IIS application.
-* Runs on top of .Net Core and .Net Framework.
-
----
-
-# Asp.Net Core
-
-![](aspnetcore20.png "Logo Title Text 1")
-
----
-
-# Oracle
-
-* Waited a LONG time before implementing a driver for .Net Core/Netstandard
-* Available as a NuGet package (ETA Q3 2018)
-* "Old" managed driver can still be used for projects targeting the full framework (cross compilation).
-
----
-
-
-# Kestrel
-
-"Kestrel is a cross-platform web server for ASP.NET Core based on libuv, a cross-platform asynchronous I/O library. Kestrel is the web server that's included by default in ASP.NET Core project templates."
-
-* Performance
-* Cross platform
-
-https://www.techempower.com/benchmarks/#section=data-r15&hw=ph&test=plaintext
-
----
-
-# DotNet Global Tools
-
+* Distribute command line apps as NuGet packages
+* Requires the .Net Core runtime to be installed
+* Cross platform package manager
 * Allows global extensions to the DotNet CLI.
 * Provides the same semantics as global NPM modules
 
 ```
-dotnet install tool -g dotnet-serve
+dotnet tool install -g dotnet-deps
 ```
+
+![](dips.png "Logo")
 
 ---
 
@@ -345,7 +313,90 @@ dotnet install tool -g dotnet-serve
 ---
 
 
+# Net Standard
 
+"The .NET Standard is a formal specification of .NET APIs that are intended to be available on all .NET implementations. The motivation behind the .NET Standard is establishing greater uniformity in the .NET ecosystem."
+
+* Relevant for all implentations of the CLI (Mono, .Net Framework, .Net Core)
+
+* Replaces PCL's (Portable class libraries).
+
+* With NetStandard2.0 we start to see NuGet packages that are NetStandard2.0 only.
+
+* The need for cross compilation becomes less relevant as the standard emerges.
+
+![](dips.png "Logo")
+---
+
+# Portable Class Libraries
+
+## PCL Hell
+
+https://github.com/seesharper/LightInject/blob/116c47e5ea2613e5ec22b133f38e7c78928b4481/LightInject/LightInject.cs
+
+## NetStandard
+
+https://github.com/seesharper/LightInject/blob/master/src/LightInject/LightInject.cs
+
+![](dips.png "Logo")
+---
+
+# Portable Class Libraries
+
+![](PCL.png "Logo Title Text 1")
+---
+![](PCL2.png "Logo Title Text 1")
+---
+![](netstandard.png "Logo Title Text 1")
+---
+
+# Code coverage
+
+* An important tool to measure code quality
+* Coverlet (Cross platform code coverage analysis)
+* What is an acceptable threshold for code coverage?
+
+---
+
+
+# Asp.Net Core
+
+![](aspnetcore20.png "Logo Title Text 1")
+
+---
+
+
+# Kestrel
+
+"Kestrel is a cross-platform web server for ASP.NET Core based on libuv, a cross-platform asynchronous I/O library. Kestrel is the web server that's included by default in ASP.NET Core project templates."
+
+* Performance
+* Cross platform
+* Typically behind a reverse proxy such as NGINX
+
+https://www.techempower.com/benchmarks/#section=data-r19&hw=ph&test=plaintext
+
+---
+
+
+
+# Let's build a web app 😀
+
+We need dotnet-script for building
+
+```
+dotnet install tool -g dotnet-script
+```
+
+Clone the template repo
+
+```
+git clone https://github.com/seesharper/NTNU.WebAppTemplate.git
+```
+https://github.com/seesharper/NTNU.WebAppTemplate.git
+
+
+![](dips.png "Logo")
 
 
 
